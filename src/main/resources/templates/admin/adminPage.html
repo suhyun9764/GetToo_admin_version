@@ -32,7 +32,24 @@
                 <button type="submit">승인</button>
             </form>
         </td>
+        <td>
+            <form th:action="@{/admin/checkimg}" method="get">
+                <input type="hidden" name="clientId" th:value="${client.id}">
+                <button type="submit" onclick="showImage('${client.imageFileName}')">학생증 확인</button>
+            </form>
+            <div id="imageContainer"></div>
+        </td>
+
     </tr>
+    <script th:inline="javascript">
+        function showImage(imageFileName) {
+            var imageContainer = document.getElementById("imageContainer");
+            var imageUrl = '/images/' + imageFileName;
+
+            imageContainer.innerHTML = '<img src="' + imageUrl + '" alt="학생증 이미지">';
+        }
+    </script>
+
     </tbody>
 </table>
 </body>

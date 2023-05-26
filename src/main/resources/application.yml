@@ -11,6 +11,10 @@ spring:
           name: user
           password: 1234
 
+    upload:
+    directory: C:/capstoneImage
+
+
 
     thymeleaf:
       prefix: classpath:/templates/

@@ -38,7 +38,7 @@
     <!-- login area -->
     <section class="join_form">
         <h1> 회원가입 </h1>
-        <form action="/client/join" method="POST">
+        <form action="/client/join" method="POST" enctype="multipart/form-data">
             <div class="int-area">
                 <input type="text" name="id" id="id" autocomplete="off" required  maxlength="20">
                 <label for="id"> 아이디 </label>
@@ -83,7 +83,11 @@
                 <label for="school1"><input type="radio" name="school" id="school1" value="ing"> 재학생 </label>
                 <label for="school2"><input type="radio" name="school" id="school2" value="rest"> 휴학생 </label>
                 <label for="school3"><input type="radio" name="school" id="school3" value="end"> 졸업생 </label>
-            </div>   mm 
+            </div>
+            <div class="int-area">
+                <input type="file" name="imageFile" id="imageFile" accept="image/*" required>
+                <label for="imageFile"> 이미지 업로드 </label>
+            </div>
             <div class="btn-area">
                 <button id="btn" type="submit"> 회원가입 </button>
             </div>

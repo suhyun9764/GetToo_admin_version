@@ -5,6 +5,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import javax.sql.DataSource;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,9 +20,10 @@ public class MysqlClientRepository implements ClientRepository{
     }
     @Override
     public void save(Client client) {
-        String sql = "INSERT INTO client(id,name,age,studentNumber,email,school,department, pwd) values(?,?,?,?,?,?,?,?)";
+
+        String sql = "INSERT INTO client(id,name,age,studentNumber,email,school,department, pwd,imagepath) values(?,?,?,?,?,?,?,?,?)";
         jdbcTemplate.update(sql,client.getId(),client.getName(),client.getAge(),client.getStudentNumber(),
-                client.getEmail(),client.getSchool(),client.getDepartment(),client.getPwd());
+                client.getEmail(),client.getSchool(),client.getDepartment(),client.getPwd(),client.getImagePath());
     }
 
     @Override
@@ -79,6 +83,7 @@ public class MysqlClientRepository implements ClientRepository{
             client.setLeader(rs.getString("Leader"));
             client.setJoinCheck(rs.getString("joincheck"));
             client.setAdminCheck(rs.getString("admincheck"));
+            client.setImagePath(rs.getString("imagepath"));
             return client;
         };
     }

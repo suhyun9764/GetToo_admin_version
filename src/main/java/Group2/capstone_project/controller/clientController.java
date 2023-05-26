@@ -6,19 +6,29 @@ import Group2.capstone_project.service.clientService;
 import Group2.capstone_project.session.SessionConst;
 import Group2.capstone_project.session.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Controller
 public class clientController {
@@ -28,10 +38,16 @@ public class clientController {
     private final clientService clientserivce;
     private final SessionManager sessionManager = new SessionManager();
 
+    private final ResourceLoader resourceLoader;
+    @Value("${upload.directory}")
+    private String uploadDirectory;
+
+
     @Autowired
-    public clientController(clientService clientService,PasswordEncoder passwordEncoder){
+    public clientController(clientService clientService,PasswordEncoder passwordEncoder,ResourceLoader resourceLoader){
         this.clientserivce = clientService;
         this.passwordEncoder =passwordEncoder;
+        this.resourceLoader = resourceLoader;
     }
 
     @GetMapping("/")
@@ -163,10 +179,39 @@ public class clientController {
         client.setPwd(passwordEncoder.encode(ClientDto.getPassword()));
         client.setSchool(ClientDto.getSchool());
         client.setDepartment(ClientDto.getDepartment());
+        MultipartFile imageFile = ClientDto.getImageFile();
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                // 이미지 파일을 저장할 경로를 설정합니다.
+                String fileName = imageFile.getOriginalFilename();
+                String storeFileName = createStoreFileName(fileName);
+                Path filePath = Path.of(uploadDirectory, storeFileName);
+
+                // 파일을 지정된 경로로 복사합니다.
+                Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+                System.out.println(fileName);
+                // 이미지 파일 경로를 클라이언트 객체에 설정합니다.
+                client.setImagePath(filePath.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+                // 에러 처리 방식에 따라 예외 처리 코드를 작성하세요.
+            }
+        }
         clientserivce.join(client);
 
         return "login.html";
     }
+    private String createStoreFileName(String originalFilename) {
+        String ext = extractExt(originalFilename);
+        String uuid = UUID.randomUUID().toString();
+        return uuid + "." + ext;
+    }
+    private String extractExt(String originalFilename) {
+        int pos = originalFilename.lastIndexOf(".");
+        return originalFilename.substring(pos + 1);
+    }
+
+
 
  // 아이디 찾기 관련
     @PostMapping("/client/findID")
@@ -297,4 +342,21 @@ public class clientController {
         return "redirect:/admin/list";  // 작업 완료 후 리다이렉션할 페이지를 반환
     }
 
+    @GetMapping("/admin/checkimg")
+    public ResponseEntity<Resource> showStudentCardImage(@RequestParam("clientId") String clientId) throws IOException {
+        Client client = clientserivce.findById(clientId);
+        String imagePath = client.getImagePath() ;
+        System.out.println(client.getImagePath());
+        Resource imageResource = resourceLoader.getResource("file:" + imagePath);
+
+        if (imageResource.exists()) {
+            System.out.println(client.getImagePath()+"ok!!");
+            return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_JPEG)
+                    .body(imageResource);
+        } else {
+            System.out.println(client.getImagePath()+"NO!!");
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package Group2.capstone_project.dto.client;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.multipart.MultipartFile;
 
 public class ClientDto {
 
@@ -23,6 +24,17 @@ public class ClientDto {
     private String joinCheck;
 
     private String adminCheck;
+
+    private MultipartFile imageFile;
+
+    public MultipartFile getImageFile() {
+        return imageFile;
+    }
+
+    public void setImageFile(MultipartFile imageFile) {
+        this.imageFile = imageFile;
+    }
+
 
     public String getAdminCheck() {
         return adminCheck;

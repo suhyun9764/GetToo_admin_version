@@ -5022,12 +5022,16 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <DefaultExpression>&apos;NO&apos;</DefaultExpression>
       <Position>11</Position>
     </column>
-    <index id="1133" parent="381" name="PRIMARY">
+    <column id="1133" parent="381" name="imagepath">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>12</Position>
+    </column>
+    <index id="1134" parent="381" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="1134" parent="381" name="PRIMARY">
+    <key id="1135" parent="381" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
