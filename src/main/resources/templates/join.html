@@ -88,9 +88,22 @@
                 <input type="file" name="imageFile" id="imageFile" accept="image/*" required>
                 <label for="imageFile"> 이미지 업로드 </label>
             </div>
+            </div>
+            <label for="security-question">본인 확인 질문:</label>
+            <select id="security-question" name="question">
+                <option value="q1">출생지는 어디인가요?</option>
+                <option value="q2">초등학교 이름은 무엇인가요?</option>
+                <option value="q3">가장 좋아하는 음식은 무엇인가요?</option>
+            </select>
+            <br>
+            <label for="answer">답변:</label>
+            <input type="text" id="answer" name="answer" required>
+            <br>
+            </div>
             <div class="btn-area">
                 <button id="btn" type="submit"> 회원가입 </button>
             </div>
+
         </form>
     </section>
 

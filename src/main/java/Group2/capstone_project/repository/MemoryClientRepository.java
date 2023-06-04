@@ -35,6 +35,11 @@ public class MemoryClientRepository implements ClientRepository{
     }
 
     @Override
+    public void updatePwd(String id, String newEncodePwd) {
+
+    }
+
+    @Override
     public void authJoin(String id) {
 
     }
@@ -46,7 +51,7 @@ public class MemoryClientRepository implements ClientRepository{
 
 
     @Override
-    public Optional<Client> findPwd(String name, String id, String studentNumber, String email) {
+    public Optional<Client> findPwd(String name, String id, String studentNumber, String question, String answer) {
         return clients.stream().filter(client -> client.getName().equals(name)
                  &&client.getId().equals(id)
                 &&client.getStudentNumber().equals(studentNumber)).findAny();

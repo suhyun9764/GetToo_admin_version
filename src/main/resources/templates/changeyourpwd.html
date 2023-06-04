@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>비밀번호 변경</title>
+  <script th:inline="javascript">
+    function validateForm() {
+      var newPassword = document.getElementById("newPassword").value;
+      var confirmPassword = document.getElementById("confirmPassword").value;
+
+      if (newPassword !== confirmPassword) {
+        alert("비밀번호가 일치하지 않습니다.");
+        return false;
+      }
+    }
+  </script>
+</head>
+<body>
+<h1>비밀번호 변경</h1>
+
+<form action="/changePwd" method="post" onsubmit="return validateForm()">
+  <input type="hidden" name="id" th:value="${id}" th:readonly="true">
+
+  <label for="newPassword">새로운 비밀번호:</label>
+  <input type="password" id="newPassword" name="newPassword" required><br><br>
+
+  <label for="confirmPassword">비밀번호 확인:</label>
+  <input type="password" id="confirmPassword" name="confirmPassword" required><br><br>
+
+  <input type="submit" value="비밀번호 변경">
+</form>
+</body>
+</html>

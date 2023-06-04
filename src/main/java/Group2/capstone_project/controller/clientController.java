@@ -197,6 +197,8 @@ public class clientController {
                 // 에러 처리 방식에 따라 예외 처리 코드를 작성하세요.
             }
         }
+        client.setQuestion(ClientDto.getQuestion());
+        client.setAnswer(ClientDto.getAnswer());
         clientserivce.join(client);
 
         return "login.html";
@@ -235,6 +237,13 @@ public class clientController {
         return "idSearch.html";
     }
 
+    @GetMapping("/gotoPwdSearch")
+    public String gotoPwdSearch(){
+        return "passwordsearch.html";
+    }
+
+
+
     @GetMapping("/redirectIdSearch")
     public String redirectIdSearch(Model model){
         model.addAttribute("errorMessage", "일치하는 계정정보가 없습니다");
@@ -242,16 +251,25 @@ public class clientController {
     }
 
 // 비밀번호 찾기 관련
-    @GetMapping("client/findPwd")
+    @GetMapping("/client/findPwd")
     public String findPwd(Model model, ClientDto ClientDto){
         Client client = new Client();
         client.setName(ClientDto.getName());
         client.setId(ClientDto.getId());
         client.setStudentNumber(ClientDto.getStudentNumber());
-        client.setEmail(client.getEmail());
-        String result = clientserivce.findPwd(client.getName(), client.getId(), client.getStudentNumber(),client.getEmail());
-        model.addAttribute("result",result);
-        return "client/checkyourPwd";
+        client.setQuestion(ClientDto.getQuestion());
+        client.setAnswer(ClientDto.getAnswer());
+        Optional<Client> result = clientserivce.findPwd(client.getName(), client.getId(), client.getStudentNumber(),client.getQuestion(),client.getAnswer());
+        model.addAttribute("id",result.get().getId());
+        System.out.println(result.get().getName());
+        return "changeyourpwd.html";
+    }
+
+    @PostMapping("/changePwd")
+    public String changePwd(@RequestParam("id") String id, @RequestParam("newPassword") String newPassword){
+        String newEncodePwd = passwordEncoder.encode(newPassword);
+        clientserivce.changePwd(id,newEncodePwd);
+        return "login.html";
     }
     @GetMapping("/client/update")
         public String updateForm(HttpSession session,Model model){

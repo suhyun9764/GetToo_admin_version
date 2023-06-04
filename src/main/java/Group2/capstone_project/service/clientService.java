@@ -39,9 +39,13 @@ public class clientService {
             return "false";
     }
 
-    public String findPwd(String clientName, String clientId, String clientStudentNumber, String clientEmail) {
-        Optional<Client> client = clientRepository.findPwd(clientName, clientId, clientStudentNumber, clientEmail);
-        return client.get().getPwd();
+    public Optional<Client> findPwd(String clientName, String clientId, String clientStudentNumber, String question, String answer) {
+        Optional<Client> client = clientRepository.findPwd(clientName, clientId, clientStudentNumber,question,answer);
+        return client;
+    }
+
+    public void changePwd(String id, String newEncodePwd){
+        clientRepository.updatePwd(id,newEncodePwd);
     }
 
     public List<Client> findAll() {

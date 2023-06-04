@@ -21,9 +21,9 @@ public class MysqlClientRepository implements ClientRepository{
     @Override
     public void save(Client client) {
 
-        String sql = "INSERT INTO client(id,name,age,studentNumber,email,school,department, pwd,imagepath) values(?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO client(id,name,age,studentNumber,email,school,department, pwd,imagepath,question, answer) values(?,?,?,?,?,?,?,?,?,?,?)";
         jdbcTemplate.update(sql,client.getId(),client.getName(),client.getAge(),client.getStudentNumber(),
-                client.getEmail(),client.getSchool(),client.getDepartment(),client.getPwd(),client.getImagePath());
+                client.getEmail(),client.getSchool(),client.getDepartment(),client.getPwd(),client.getImagePath(),client.getQuestion(),client.getAnswer());
     }
 
     @Override
@@ -31,7 +31,6 @@ public class MysqlClientRepository implements ClientRepository{
         System.out.println(name+studentNumber+email);
         String[] object = {name,studentNumber,email};
         String sql = "SELECT * FROM client where name = ? and studentNumber = ? and email = ?";
-
         List<Client> result = jdbcTemplate.query(sql,clientRowMapper(),object);
         if(result.isEmpty()){
             System.out.println("repoEmpty");
@@ -42,9 +41,9 @@ public class MysqlClientRepository implements ClientRepository{
     }
 
     @Override
-    public Optional<Client> findPwd(String name, String id, String studentNumber, String email) {
-        String[] object = {name,id,studentNumber,email};
-        String sql = "SELECT * FROM client where name = ? and id = ? and studentNumber = ? and email =?";
+    public Optional<Client> findPwd(String name, String id, String studentNumber, String question,String answer) {
+        String[] object = {name,id,studentNumber, question, answer};
+        String sql = "SELECT * FROM client where name = ? and id = ? and studentNumber = ? and question =? and answer=?";
         List<Client> result = jdbcTemplate.query(sql,clientRowMapper(),object);
         if(result.isEmpty()){
             System.out.println("repoEmpty");
@@ -94,6 +93,8 @@ public class MysqlClientRepository implements ClientRepository{
         return result.stream().findAny();
     }
 
+
+
     @Override
     public void authJoin(String id) {
         String sql = "UPDATE client SET joincheck ='YES' WHERE id=?";
@@ -106,4 +107,13 @@ public class MysqlClientRepository implements ClientRepository{
         String[] object = {client.getName(),client.getStudentNumber(),client.getAge(),client.getId()};
         jdbcTemplate.update(sql,client.getName(),client.getStudentNumber(),client.getAge(),client.getId());
     }
+
+    @Override
+    public void updatePwd(String id, String newEncodePwd) {
+        String sql = "UPDATE client SET pwd= ? WHERE id =?  ";
+        System.out.println("mysql : "+id+":"+newEncodePwd);
+        jdbcTemplate.update(sql,newEncodePwd,id);
+    }
+
+
 }

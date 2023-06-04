@@ -5026,12 +5026,20 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <DasType>varchar(255)|0s</DasType>
       <Position>12</Position>
     </column>
-    <index id="1134" parent="381" name="PRIMARY">
+    <column id="1134" parent="381" name="question">
+      <DasType>varchar(10)|0s</DasType>
+      <Position>13</Position>
+    </column>
+    <column id="1135" parent="381" name="answer">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>14</Position>
+    </column>
+    <index id="1136" parent="381" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="1135" parent="381" name="PRIMARY">
+    <key id="1137" parent="381" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
